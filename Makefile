@@ -9,7 +9,7 @@ ZIP=node ../zip.js
 
 ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/
 ELECTRON_VERSION=1.8.4
-BUILD=ELECTRON_MIRROR=$(ELECTRON_MIRROR) $(PKGER) ./dist $(NAME) --asar --overwrite --out=build --version $(ELECTRON_VERSION) --app-version $(VERSION)
+BUILD= $(PKGER) ./dist $(NAME) --ELECTRON_MIRROR=$(ELECTRON_MIRROR) --asar --overwrite --out=build --version $(ELECTRON_VERSION) --app-version $(VERSION)
 ELECTON=./node_modules/.bin/electron
 
 i:
@@ -34,7 +34,7 @@ build:
 
 win64:
 	$(BUILD) --platform=win32 --arch=x64 --icon=$(CUSTOM)/icon.ico
-	cp -rf $(CUSTOM) build/$(NAME)-win32-x64/resources
+	cp -rf $(CUSTOM) ./build/$(NAME)-win32-x64/resources
 	rm -rf releases/$(VERSION)/$(NAME)-win32-x64.zip && mkdir -p releases/$(VERSION)
 	cd build && $(ZIP) ../releases/$(VERSION)/$(NAME)-win32-x64.zip $(NAME)-win32-x64/
 win32:
