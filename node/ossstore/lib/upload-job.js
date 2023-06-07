@@ -336,7 +336,6 @@ UploadJob.prototype.uploadSingle = function () {
  * @param checkPoints
  */
 UploadJob.prototype.uploadMultipart = function (checkPoints) {
-    console.log("分片上传");
     var self = this;
 
     var maxRetries = RETRYTIMES;
@@ -361,7 +360,7 @@ UploadJob.prototype.uploadMultipart = function (checkPoints) {
         Key: self.to.key,
         ContentType: mime.lookup(self.from.path),
     };
-    if (NoCacheExtNames.includes(path.extname(filePath))) {
+    if (NoCacheExtNames.includes(path.extname(self.from.path))) {
         params["CacheControl"] = "no-cache, no-store";
         params["Expires"] = 0;
     }
