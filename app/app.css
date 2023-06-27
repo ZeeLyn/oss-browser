@@ -209,11 +209,19 @@ fieldset[disabled] .form-control {
 .list-group-item {
     border: none !important;
     background-color: transparent !important;
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid #2d2d2d !important;
 }
 .trans-nav.nav {
     background: transparent !important;
 }
 .nav-tabs > li > a {
     border-radius: 0 !important;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    border-top: 1px solid #2d2d2d;
 }
