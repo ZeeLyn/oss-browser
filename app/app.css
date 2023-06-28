@@ -225,3 +225,56 @@ fieldset[disabled] .form-control {
 .table > tfoot > tr > td {
     border-top: 1px solid #2d2d2d;
 }
+.trans-dock-btn {
+    background: #272727 !important;
+    color: #eeeeee !important;
+    border: none !important;
+}
+
+.table > thead > tr > td.info,
+.table > tbody > tr > td.info,
+.table > tfoot > tr > td.info,
+.table > thead > tr > th.info,
+.table > tbody > tr > th.info,
+.table > tfoot > tr > th.info,
+.table > thead > tr.info > td,
+.table > tbody > tr.info > td,
+.table > tfoot > tr.info > td,
+.table > thead > tr.info > th,
+.table > tbody > tr.info > th,
+.table > tfoot > tr.info > th {
+    background: #444444;
+}
+
+.table-hover > tbody > tr > td.active:hover,
+.table-hover > tbody > tr > th.active:hover,
+.table-hover > tbody > tr.active:hover > td,
+.table-hover > tbody > tr:hover > .active,
+.table-hover > tbody > tr:hover,
+.table-hover > tbody > tr.active:hover > th {
+    background-color: #444444;
+}
+.fa-remove:before,
+.fa-close:before,
+.close,
+.fa-times:before {
+    color: #fff;
+}
+.text-danger {
+    color: #fe431d;
+}
+.btn-default {
+    background-color: #2d2d2d !important;
+    color: #e2e2e2;
+}
+.btn-default * {
+    color: #e2e2e2;
+}
+.btn-default:hover *,
+.btn-default:hover {
+    color: #1cafff;
+}
+
+a:hover {
+    color: #1cafff;
+}
