@@ -180,6 +180,7 @@ a {
 .address-bar {
     background: #1f1f1f !important;
 }
+
 .modal-content,
 .modal-header,
 .modal-footer {
@@ -291,11 +292,11 @@ a:hover {
 .form-control {
     border: 1px solid #626161 !important;
 }
+
 .input-group-addon {
     background-color: #282828 !important;
     border: 1px solid #626161 !important;
     border-left: none !important;
-    overflow: hidden;
 }
 .my-nav.navbar {
     border-bottom: none !important;
@@ -315,4 +316,13 @@ a:hover {
     background-color: #404040 !important;
     border: 1px solid #404040 !important;
     color: #1cafff !important;
+}
+.search-group {
+    display: flex;
+}
+.search-group .input-group-addon {
+    min-width: 45px;
+    width: auto;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
