@@ -16,7 +16,7 @@ var isLogInfo = localStorage.getItem("logFileInfo") || 0;
 var log = require("electron-log");
 
 var { ipcRenderer } = require("electron");
-
+const NoCacheExtNames = [".html", ".htm"];
 class UploadJob extends Base {
   /**
    *
@@ -146,19 +146,20 @@ UploadJob.prototype.wait = function () {
 //crc 校验失败，删除oss文件
 UploadJob.prototype.deleteOssFile = function () {
   var self = this;
-  self.oss.deleteObject({ Bucket: self.to.bucket, Key: self.to.key }, function (
-    err
-  ) {
-    if (err) console.error(err);
-    else
-      console.log(
-        "crc64 verifying failed, oss file [oss://" +
-          self.to.bucket +
-          "/" +
-          self.to.key +
-          "] is deleted"
-      );
-  });
+  self.oss.deleteObject(
+    { Bucket: self.to.bucket, Key: self.to.key },
+    function (err) {
+      if (err) console.error(err);
+      else
+        console.log(
+          "crc64 verifying failed, oss file [oss://" +
+            self.to.bucket +
+            "/" +
+            self.to.key +
+            "] is deleted"
+        );
+    }
+  );
 };
 
 UploadJob.prototype._changeStatus = function (status, retryTimes) {
@@ -191,41 +192,42 @@ UploadJob.prototype.startUpload = function () {
     log.info(`prepareChunks ${self.from.path}`);
   }
 
-  util.prepareChunks(self.from.path, self.checkPoints, function (
-    err,
-    checkPoints
-  ) {
-    if (err) {
-      self.message = err.message;
-      self._changeStatus("failed");
-      self.emit("error", err);
-      return;
-    }
-
-    self.checkPoints = checkPoints;
-    //console.log(checkPoints)
-
-    //console.log('chunks.length:',checkPoints.chunks.length)
-    if (checkPoints.chunks.length == 1 && checkPoints.chunks[0].start == 0) {
-      if (isDebug) console.log("uploadSingle", self.from.path);
-
-      if (isLog == 1 && isLogInfo == 1) {
-        log.transports.file.level = "info";
-        log.info(`uploadSingle ${self.from.path}`);
+  util.prepareChunks(
+    self.from.path,
+    self.checkPoints,
+    function (err, checkPoints) {
+      if (err) {
+        self.message = err.message;
+        self._changeStatus("failed");
+        self.emit("error", err);
+        return;
       }
 
-      self.uploadSingle();
-    } else {
-      if (isDebug) console.log("uploadMultipart", self.from.path);
+      self.checkPoints = checkPoints;
+      //console.log(checkPoints)
 
-      if (isLog == 1 && isLogInfo == 1) {
-        log.transports.file.level = "info";
-        log.info(`uploadMultipart ${self.from.pathh}`);
+      //console.log('chunks.length:',checkPoints.chunks.length)
+      if (checkPoints.chunks.length == 1 && checkPoints.chunks[0].start == 0) {
+        if (isDebug) console.log("uploadSingle", self.from.path);
+
+        if (isLog == 1 && isLogInfo == 1) {
+          log.transports.file.level = "info";
+          log.info(`uploadSingle ${self.from.path}`);
+        }
+
+        self.uploadSingle();
+      } else {
+        if (isDebug) console.log("uploadMultipart", self.from.path);
+
+        if (isLog == 1 && isLogInfo == 1) {
+          log.transports.file.level = "info";
+          log.info(`uploadMultipart ${self.from.pathh}`);
+        }
+
+        self.uploadMultipart(checkPoints);
       }
-
-      self.uploadMultipart(checkPoints);
     }
-  });
+  );
 };
 
 UploadJob.prototype.startSpeedCounter = function () {
@@ -296,7 +298,10 @@ UploadJob.prototype.uploadSingle = function () {
       Body: data,
       ContentType: mime.lookup(self.from.path),
     };
-
+    if (NoCacheExtNames.includes(path.extname(filePath))) {
+      params["CacheControl"] = "no-cache, no-store";
+      params["Expires"] = 0;
+    }
     self.prog = {
       loaded: 0,
       total: Buffer.byteLength(data),
@@ -412,6 +417,10 @@ UploadJob.prototype.uploadMultipart = function (checkPoints) {
     Key: self.to.key,
     ContentType: mime.lookup(self.from.path),
   };
+  if (NoCacheExtNames.includes(path.extname(self.from.path))) {
+    params["CacheControl"] = "no-cache, no-store";
+    params["Expires"] = 0;
+  }
   self.prog.total = checkPoints.file.size;
 
   var keepFd;

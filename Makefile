@@ -8,8 +8,8 @@ PKGER=node node_modules/electron-packager/cli.js
 ZIP=node ../zip.js
 
 ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
-ELECTRON_VERSION=1.8.4
-BUILD=ELECTRON_MIRROR=$(ELECTRON_MIRROR) $(PKGER) ./dist $(NAME) --asar --asar-unpack *.node --overwrite --out=build --version $(ELECTRON_VERSION) --app-version $(VERSION)
+ELECTRON_VERSION=2.0.18
+BUILD=$(PKGER) ./dist $(NAME) --asar --asar-unpack *.node --overwrite --out=build --version $(ELECTRON_VERSION) --app-version $(VERSION)
 ELECTON=./node_modules/.bin/electron
 
 i:
@@ -33,6 +33,7 @@ build:
 	node gen.js
 
 win64:
+	@echo $(BUILD) --platform=win32 --arch=x64 --icon=$(CUSTOM)/icon.ico
 	$(BUILD) --platform=win32 --arch=x64 --icon=$(CUSTOM)/icon.ico
 	cp -rf $(CUSTOM) build/$(NAME)-win32-x64/resources
 	rm -rf releases/$(VERSION)/$(NAME)-win32-x64.zip && mkdir -p releases/$(VERSION)

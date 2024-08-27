@@ -68,6 +68,8 @@ function createWindow() {
 
     webPreferences: {
       plugins: true,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   };
 
@@ -90,7 +92,7 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
-
+  // win.webContents.openDevTools();
   // drawin 就是 MacOS
   if (process.env.NODE_ENV == "development") {
     console.log("开发模式");
@@ -115,7 +117,7 @@ ipcMain.on("asynchronous", (event, data) => {
       event.sender.send("asynchronous-reply", { key: data.key, port: port });
       break;
     case "openDevTools":
-      process.env["DEBUG"] = 'ali-oss';
+      process.env["DEBUG"] = "ali-oss";
       win.webContents.openDevTools();
       break;
 
